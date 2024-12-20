@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED Checkbox Effect</title>
+    <style>
+        /* Your existing CSS styles (no change) */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            background-image: url('videoplayback-_3_.gif');
+            background-size: cover;
+            background-position: center;
+            perspective: 10000px;
+            flex-wrap: wrap;
+            gap: 20px;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .site-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .card-link {
+            text-decoration: none;
+        }
+
+        .card {
+            width: 300px;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: rotateY(15deg) rotateX(15deg);
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .card-1 {
+            background-image: url('sunset-cloud-formation-stockcake.webp');
+        }
+
+        .card-2 {
+            background-image: url('night-sky-dreams-stockcake.webp');
+        }
+
+        .card-3 {
+            background-image: url('kfaya_00000.jpg');
+        }
+
+        .character {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -150%);
+            width: 150px;
+            height: auto;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .card:hover .character {
+            opacity: 1;
+            transform: translate(-50%, -200%) scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding-top: 5%;
+        }
+
+        .hologram {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            font-size: 24px;
+            width: 60%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            overflow: hidden;
+            animation: glowAnimation 3s linear infinite;
+        }
+
+        @keyframes glowAnimation {
+            0% {
+                border: 3px solid rgba(0, 255, 255, 0.7);
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.9), 0 0 60px rgba(0, 255, 255, 0.8);
+            }
+            25% {
+                border: 3px solid rgba(255, 0, 255, 0.7);
+                box-shadow: 0 0 30px rgba(255, 0, 255, 0.9), 0 0 60px rgba(255, 0, 255, 0.8);
+            }
+            50% {
+                border: 3px solid rgba(255, 255, 0, 0.7);
+                box-shadow: 0 0 30px rgba(255, 255, 0, 0.9), 0 0 60px rgba(255, 255, 0, 0.8);
+            }
+            75% {
+                border: 3px solid rgba(0, 255, 0, 0.7);
+                box-shadow: 0 0 30px rgba(0, 255, 0, 0.9), 0 0 60px rgba(0, 255, 0, 0.8);
+            }
+            100% {
+                border: 3px solid rgba(0, 255, 255, 0.7);
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.9), 0 0 60px rgba(0, 255, 255, 0.8);
+            }
+        }
+
+        .hologram h2 {
+            font-size: 36px;
+            color: #00FFFF;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .routine-item {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .routine-item input[type="checkbox"] {
+            opacity: 0;
+            position: absolute;
+        }
+
+        .routine-item .checkbox-wrapper {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #333;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .routine-item input[type="checkbox"]:checked + .checkbox-wrapper {
+            background-color: #32CD32;
+            box-shadow: 0 0 10px rgba(50, 205, 50, 0.8), 0 0 20px rgba(50, 205, 50, 0.8);
+        }
+
+        .routine-item .checkbox-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .routine-item input[type="checkbox"]:checked + .checkbox-wrapper::before {
+            background-color: #32CD32;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Glowing malfunction effect when checkboxes are all checked */
+        .malfunction {
+            animation: malfunctionAnimation 1s infinite;
+        }
+
+        @keyframes malfunctionAnimation {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Change "Routine." text color to white for all cards */
+        .card-1 .card-content p,
+        .card-2 .card-content p,
+        .card-3 .card-content p {
+            color: #FFFFFF; /* White color for "Routine." text */
+        }
+    </style>
+</head>
+<body>
+    <div class="site-title">
+        Marwan's Looksmaxxing !
+    </div>
+
+    <div class="container">
+        <a href="#" class="card-link" onclick="openModal('modal1')">
+            <div class="card card-1">
+                <div class="card-content">
+                    <h2>Morning</h2>
+                    <p>Routine.</p>
+                </div>
+                <img src="fastrtttt_00000.png" alt="Character 1" class="character">
+            </div>
+        </a>
+    </div>
+
+    <div class="container">
+        <a href="#" class="card-link" onclick="openModal('modal2')">
+            <div class="card card-2">
+                <div class="card-content">
+                    <h2>Night</h2>
+                    <p>Routine.</p>
+                </div>
+                <img src="fast_00000.png" alt="Character 2" class="character">
+            </div>
+        </a>
+    </div>
+
+    <div class="container">
+        <a href="#" class="card-link" onclick="openModal('modal3')">
+            <div class="card card-3">
+                <div class="card-content">
+                    <h2>GYM</h2>
+                    <p>Routine.</p>
+                </div>
+                <img src="fasfawetfg3qt3_00000.png" alt="Character 3" class="character">
+            </div>
+        </a>
+    </div>
+
+    <!-- Modal for Morning Routine -->
+    <div id="modal1" class="modal">
+        <div class="hologram">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h2>Your Morning Routine</h2>
+            <div class="routine-item">
+                <input type="checkbox" id="iceFace" onchange="checkAll('modal1')" />
+                <label for="iceFace" class="checkbox-wrapper"></label>
+                <span>Ice Your Face</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="faceLift" onchange="checkAll('modal1')" />
+                <label for="faceLift" class="checkbox-wrapper"></label>
+                <span>Face Lift</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="massageFace" onchange="checkAll('modal1')" />
+                <label for="massageFace" class="checkbox-wrapper"></label>
+                <span>Massage Your Face</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="faceExercises" onchange="checkAll('modal1')" />
+                <label for="faceExercises" class="checkbox-wrapper"></label>
+                <span>Face Exercises</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="jawExercises" onchange="checkAll('modal1')" />
+                <label for="jawExercises" class="checkbox-wrapper"></label>
+                <span>Jaw Exercises</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="bonesmash" onchange="checkAll('modal1')" />
+                <label for="bonesmash" class="checkbox-wrapper"></label>
+                <span>Bonesmash (if needed)</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="skinCare1" onchange="checkAll('modal1')" />
+                <label for="skinCare1" class="checkbox-wrapper"></label>
+                <span>Skin care</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="skinCare2" onchange="checkAll('modal1')" />
+                <label for="skinCare2" class="checkbox-wrapper"></label>
+                <span>Skin care</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="brushTeeth1" onchange="checkAll('modal1')" />
+                <label for="brushTeeth1" class="checkbox-wrapper"></label>
+                <span>Brush Teeth</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="threeLWater" onchange="checkAll('modal1')" />
+                <label for="threeLWater" class="checkbox-wrapper"></label>
+                <span>3L Water</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="coffee" onchange="checkAll('modal1')" />
+                <label for="coffee" class="checkbox-wrapper"></label>
+                <span>Coffee</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Night Routine -->
+    <div id="modal2" class="modal">
+        <div class="hologram">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <h2>Your Night Routine</h2>
+            <div class="routine-item">
+                <input type="checkbox" id="mouthTap" onchange="checkAll('modal2')" />
+                <label for="mouthTap" class="checkbox-wrapper"></label>
+                <span>Mouth Tap While Sleep</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="keepMewing" onchange="checkAll('modal2')" />
+                <label for="keepMewing" class="checkbox-wrapper"></label>
+                <span>Keep Mewing</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="posture" onchange="checkAll('modal2')" />
+                <label for="posture" class="checkbox-wrapper"></label>
+                <span>Posture</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="iceFaceNight" onchange="checkAll('modal2')" />
+                <label for="iceFaceNight" class="checkbox-wrapper"></label>
+                <span>Ice Your Face</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="brushTeethNight" onchange="checkAll('modal2')" />
+                <label for="brushTeethNight" class="checkbox-wrapper"></label>
+                <span>Brush Teeth</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Gym Routine -->
+    <div id="modal3" class="modal">
+        <div class="hologram">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <h2>Your Gym Routine</h2>
+            <div class="routine-item">
+                <input type="checkbox" id="warmUp3" onchange="checkAll('modal3')" />
+                <label for="warmUp3" class="checkbox-wrapper"></label>
+                <span>Warm-up</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="workout3" onchange="checkAll('modal3')" />
+                <label for="workout3" class="checkbox-wrapper"></label>
+                <span>Strength Training</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="coolDown3" onchange="checkAll('modal3')" />
+                <label for="coolDown3" class="checkbox-wrapper"></label>
+                <span>Cool Down</span>
+            </div>
+            <div class="routine-item">
+                <input type="checkbox" id="stretch3" onchange="checkAll('modal3')" />
+                <label for="stretch3" class="checkbox-wrapper"></label>
+                <span>Stretch</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        function checkAll(modalId) {
+            let modal = document.getElementById(modalId);
+            let checkboxes = modal.querySelectorAll('.routine-item input[type="checkbox"]');
+            let allChecked = true;
+
+            checkboxes.forEach(function(checkbox) {
+                if (!checkbox.checked) {
+                    allChecked = false;
+                }
+            });
+
+            if (allChecked) {
+                // Add glitch effect
+                modal.querySelector('.hologram').classList.add('malfunction');
+                modal.querySelector('.hologram h2').style.color = '#32CD32'; // Green text
+
+                // After the glitch effect, close the modal after 1 second
+                setTimeout(() => {
+                    closeModal(modalId);
+                }, 1000); // 1000ms = 1 second
+            } else {
+                modal.querySelector('.hologram').classList.remove('malfunction');
+                modal.querySelector('.hologram h2').style.color = ''; // Default color
+            }
+        }
+    </script>
+</body>
+</html>
